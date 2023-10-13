@@ -427,6 +427,7 @@ TEST_F(small_object_test, copy_assignment_small_to_big_throw) {
   a.push_back(7);
 
   container b;
+  // Этот тест не учитывает, если b связан с другими векторами по cow.
   for (size_t i = 0; i < 5; ++i) {
     b.push_back(i + 100);
   }
@@ -889,6 +890,35 @@ TEST_F(small_object_test, swap_big_and_small_throw) {
     EXPECT_GE(1, element::get_copy_counter());
     EXPECT_EQ(0, element::get_swap_counter());
   }
+}
+
+TEST_F(small_object_test, swap_big_and_small_2) {
+  container a;
+  a.push_back(1);
+  a.push_back(2);
+  a.push_back(3);
+  a.push_back(4);
+
+  a.pop_back();
+  a.pop_back();
+
+  container b;
+  b.push_back(5);
+  b.push_back(6);
+  b.push_back(7);
+
+  element::reset_counters();
+  a.swap(b);
+  EXPECT_GE(3, element::get_copy_counter());
+
+  ASSERT_EQ(2, b.size());
+  ASSERT_EQ(3, a.size());
+
+  EXPECT_EQ(5, a[0]);
+  EXPECT_EQ(6, a[1]);
+  EXPECT_EQ(7, a[2]);
+  EXPECT_EQ(1, b[0]);
+  EXPECT_EQ(2, b[1]);
 }
 
 TEST_F(small_object_test, begin_end) {
