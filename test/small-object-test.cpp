@@ -427,7 +427,6 @@ TEST_F(small_object_test, copy_assignment_small_to_big_throw) {
   a.push_back(7);
 
   container b;
-  // Этот тест не учитывает, если b связан с другими векторами по cow.
   for (size_t i = 0; i < 5; ++i) {
     b.push_back(i + 100);
   }
