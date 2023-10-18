@@ -906,6 +906,7 @@ TEST_F(small_object_test, swap_big_and_small_2) {
   b.push_back(6);
   b.push_back(7);
 
+  expect_static_storage(b);
   element::reset_counters();
   a.swap(b);
   EXPECT_GE(3, element::get_copy_counter());
